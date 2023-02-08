@@ -1,7 +1,7 @@
 import { describe, expect, it, beforeEach } from "vitest";
-import { render, screen, cleanup } from "@testing-library/react";
+import { render, screen, cleanup, fireEvent } from "@testing-library/react";
 
-import Avatar, {FALLBACK_AVATAR_ALT_TEXT, FALLBACK_AVATAR_URL} from "./Avatar";
+import Avatar, { FALLBACK_AVATAR_ALT_TEXT, FALLBACK_AVATAR_URL } from "./Avatar";
 
 describe("Avatar", () => {
     // clean up the DOM before each test
@@ -34,4 +34,21 @@ describe("Avatar", () => {
         const img = screen.getByAltText(FALLBACK_AVATAR_ALT_TEXT);
         expect(img).toHaveAttribute("src", FALLBACK_AVATAR_URL);
     });
+
+    it("should use a fallback image if image fails to load", () => {
+        render(<Avatar url="https://hello.com/fake.png" />);
+    
+        const img = screen.getByAltText(FALLBACK_AVATAR_ALT_TEXT);
+        fireEvent.error(img)
+        expect(img).toHaveAttribute("src", FALLBACK_AVATAR_URL);
+    });
+
+    it("should use a fallback image if url is empty string", () => {
+        render(<Avatar url="" />);
+    
+        const img = screen.getByAltText(FALLBACK_AVATAR_ALT_TEXT);
+        fireEvent.error(img)
+        expect(img).toHaveAttribute("src", FALLBACK_AVATAR_URL);
+    });
+
 });
