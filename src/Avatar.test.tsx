@@ -5,9 +5,20 @@ import Avatar from "./Avatar";
 
 describe("Avatar", () => {
   it("should render an img with alt text", () => {
-    render(<Avatar />);
-		const img = screen.getByAltText("@github-handle")
+    const url = "https://cataas.com/cat/says/hello%20world!";
+    const alt = "@github-handle";
+    render(<Avatar url={url} alt={alt} />);
+		const img = screen.getByAltText(alt)
     expect(img).toBeInTheDocument();
 		expect(img.tagName).toBe("IMG");
   });
+});
+
+it("should render the url and alt passed in", () => {
+    const url = "https://cataas.com/cat/says/hello%20world!";
+    const alt = "a beautiful cat";
+    render(<Avatar url={url} alt={alt} />);
+
+    const img = screen.getByAltText(alt);
+    expect(img).toHaveAttribute("src", url);
 });
